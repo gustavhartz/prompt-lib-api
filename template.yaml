@@ -33,7 +33,7 @@ Resources:
                   description: "200 response"
               x-amazon-apigateway-integration:
                 uri:
-                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetPrompts.Arn}/invocations
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetPromptsFunction.Arn}/invocations
                 responses: {}
                 httpMethod: POST
                 type: aws_proxy
