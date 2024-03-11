@@ -1,30 +1,29 @@
 import json
+from libs.db import list_prompts
+from libs.logger import setup_logger
+
+logger = setup_logger(__name__)
 
 
 def lambda_handler(event, context):
-    # Sample prompts data
-    sample_data = {
-        "prompts": [
-            {
-                "id": 1,
-                "title": "The Time Traveler",
-                "description": "Write a story about a time traveler.",
-            },
-            {
-                "id": 2,
-                "title": "The Lost City",
-                "description": "Describe the discovery of a lost city.",
-            },
-            {
-                "id": 3,
-                "title": "AI Utopia",
-                "description": "Imagine a world where AI has created a utopia.",
-            },
-        ]
-    }
 
-    return {
-        "statusCode": 200,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps(sample_data),
-    }
+    # Get prompts from the database
+    query_params = event.get("queryStringParameters", {})
+    search_query = query_params.get("search", None)
+
+    # Sample prompts data
+    try:
+        prompts = list_prompts(search_query)
+        return {
+            "statusCode": 200,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(
+                {"prompts": prompts}, default=str
+            ),  # Use default=str to handle datetime serialization
+        }
+    except Exception as e:
+        logger.exception(e)
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"message": "Internal server error"}),
+        }
