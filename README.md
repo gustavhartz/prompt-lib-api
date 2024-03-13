@@ -1,5 +1,13 @@
 # prompt-lib-api
 
+
+### Development notes
+* Run with `nodemon --exec "sam local start-api" -e py,yaml`
+* Build first if you get errors with python packages not recognised found f.x. "requests not found"
+* If you get the error `Error: Running AWS SAM projects locally requires Docker. Have you got it installed and running?` then Setting the `DOCKER_HOST=unix://$HOME/.docker/run/docker.sock` will help. f.x. `nodemon --exec "DOCKER_HOST=unix://$HOME/.docker/run/docker.sock sam local start-api" -e py,yaml`
+* 
+
+
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
 - hello_world - Code for the application's Lambda function.

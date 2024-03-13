@@ -5,7 +5,7 @@ from contextlib import contextmanager
 
 # Database connection parameters
 DB_PARAMS = {
-    "dbname": os.environ["DB_NAME"],
+    "database": os.environ["DB_DATABASE"],
     "user": os.environ["DB_USER"],
     "password": os.environ["DB_PASSWORD"],
     "host": os.environ["DB_HOST"],

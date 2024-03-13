@@ -41,7 +41,16 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/functions/getPrompts/
+      Environment:
+        Variables:
+          DB_DATABASE: postgres
+          DB_HOST: localhost
+          DB_PASSWORD: postgres
+          DB_PORT: "5434"
+          DB_USER: postgres
       Handler: app.lambda_handler
+      Layers:
+        - !Ref MySharedLibsLayer
       Events:
         ApiEvent:
           Type: Api
@@ -49,3 +58,14 @@ Resources:
             RestApiId: !Ref PromptLibApi
             Path: /prompts
             Method: get
+  MySharedLibsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: my-shared-libs
+      Description: Shared libraries for Lambda functions
+      ContentUri: src/libs/
+      CompatibleRuntimes:
+        - python3.12
+      RetentionPolicy: Delete
+    Metadata:
+      BuildMethod: python3.12

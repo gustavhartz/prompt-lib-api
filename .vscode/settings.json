@@ -1,0 +1,4 @@
+{
+  "python.analysis.extraPaths": ["./src", "./src/libs"],
+  "editor.formatOnSave": true
+}
