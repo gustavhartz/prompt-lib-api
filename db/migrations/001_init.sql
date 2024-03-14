@@ -1,38 +1,44 @@
--- init_db.sql
-CREATE TABLE users (
+-- Users Table
+CREATE TABLE
+  IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW ()
+  );
 
-CREATE TABLE prompts (
+-- Prompts Table
+CREATE TABLE
+  IF NOT EXISTS prompts (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     prompt TEXT NOT NULL,
-    user_id INTEGER REFERENCES users(id),
+    user_id INTEGER REFERENCES users (id),
     is_flagged BOOLEAN DEFAULT FALSE,
     is_validated BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW ()
+  );
 
-CREATE TABLE likes (
-    user_id INTEGER REFERENCES users(id),
-    prompt_id INTEGER REFERENCES prompts(id),
+-- Likes Table
+CREATE TABLE
+  IF NOT EXISTS likes (
+    user_id INTEGER REFERENCES users (id),
+    prompt_id INTEGER REFERENCES prompts (id),
     PRIMARY KEY (user_id, prompt_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW ()
+  );
 
-CREATE TABLE votes (
-    user_id INTEGER REFERENCES users(id),
-    prompt_id INTEGER REFERENCES prompts(id),
+-- Votes Table
+CREATE TABLE
+  IF NOT EXISTS votes (
+    user_id INTEGER REFERENCES users (id),
+    prompt_id INTEGER REFERENCES prompts (id),
     vote_type VARCHAR(50) CHECK (vote_type IN ('upvote', 'downvote', 'report')),
     PRIMARY KEY (user_id, prompt_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Note: PostgreSQL before version 12 does not support the ON UPDATE CURRENT_TIMESTAMP syntax.
--- You might need to create a trigger to update the updated_at field or manually update it in your application logic.
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW ()
+  );

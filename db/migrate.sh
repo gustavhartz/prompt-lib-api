@@ -11,7 +11,7 @@ echo "Running migrations..."
 for file in $MIGRATIONS_DIR/*.sql
 do
     echo "Applying migration: $file"
-    psql -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -a -f $file
+    psql PGPASSOWRD=$DB_PASSWORD -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -a -f $file
 done
 
 echo "Migrations completed."
